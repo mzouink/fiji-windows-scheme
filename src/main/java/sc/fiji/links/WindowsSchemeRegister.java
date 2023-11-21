@@ -12,12 +12,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Plugin(type = Service.class)
-public class WindowsSchemeRegister extends AbstractService implements SciJavaService {
+// This code is not working. the script keep hanging on the line: 33
+//@Plugin(type = Service.class)
+//extends AbstractService implements SciJavaService
+public class WindowsSchemeRegister  {
 
     private static final String SCHEME = "fiji";
 
-    @Override
+//    @Override
     public void initialize() {
         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
             return;
@@ -29,7 +31,8 @@ public class WindowsSchemeRegister extends AbstractService implements SciJavaSer
             String APP_PATH = getFijiPath();
 
             print("APP_PATH: " + APP_PATH);
-            boolean exists = Advapi32Util.registryKeyExists(WinReg.HKEY_CURRENT_USER, "Software\\Microsoft");
+            print(String.valueOf(WinReg.HKEY_CURRENT_USER));
+            boolean exists = Advapi32Util.registryKeyExists(WinReg.HKEY_CURRENT_USER, "\"Software\\Microsoft\"");
             print("Key exists: " + exists);
             // Check if the key already exists and the application path is the same
             if (Advapi32Util.registryKeyExists(WinReg.HKEY_CURRENT_USER, keyPath)) {
@@ -45,7 +48,7 @@ public class WindowsSchemeRegister extends AbstractService implements SciJavaSer
 
             // Create registry keys and set values
             Advapi32Util.registryCreateKey(WinReg.HKEY_CURRENT_USER, keyPath);
-            Advapi32Util.registrySetStringValue(WinReg.HKEY_CURRENT_USER, keyPath, "", "URL:" + SCHEME + " Protocol");
+            Advapi32Util.registrySetStringValue(WinReg.HKEY_CURRENT_USER, keyPath, "", "URL:" + SCHEME);
             Advapi32Util.registrySetStringValue(WinReg.HKEY_CURRENT_USER, keyPath, "URL Protocol", "");
             Advapi32Util.registryCreateKey(WinReg.HKEY_CURRENT_USER, keyPath + "\\shell");
             Advapi32Util.registryCreateKey(WinReg.HKEY_CURRENT_USER, keyPath + "\\shell\\open");
